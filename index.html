@@ -6,7 +6,8 @@
   <title>Share Love Joy Hope</title>
   <style>
     :root{
-      --bg:#f7dbe1;
+      --bg1:#f6e7eb;
+      --bg2:#f3cfd8;
       --card:#ffffff;
       --ink:#3b2b31;
       --muted:#7a6a71;
@@ -14,40 +15,30 @@
       --btn:#5a2c57;
       --btn2:#3c5bb6;
       --shadow: 0 10px 24px rgba(0,0,0,.12);
-      --radius: 18px;
     }
-
     *{ box-sizing:border-box; }
     body{
       margin:0;
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background:#ddd;
+      background: #eee;
       display:flex;
       justify-content:center;
-      padding:24px;
-      color:var(--ink);
+      padding: 22px;
+      color: var(--ink);
     }
 
-    /* ====== App Frame ====== */
-    .app{
-      width: 980px;
-      max-width: 100%;
-      display:flex;
-      gap:18px;
-      align-items:flex-start;
-    }
-
+    /* Single App (one flow) */
     .phone{
-      width: 310px;
-      height: 620px;
-      border-radius: 14px;
-      background: linear-gradient(#f6e7eb, #f3cfd8);
+      width: 340px;
+      max-width: 95vw;
+      height: 680px;
+      border-radius: 16px;
+      background: linear-gradient(var(--bg1), var(--bg2));
       box-shadow: var(--shadow);
-      position: relative;
-      overflow:hidden;
       border: 1px solid rgba(0,0,0,.06);
+      overflow:hidden;
+      position:relative;
     }
-
     .page{
       position:absolute;
       inset:0;
@@ -56,10 +47,7 @@
     }
     .page.active{ display:block; }
 
-    .top{
-      text-align:center;
-      margin-bottom: 14px;
-    }
+    .top{ text-align:center; margin-bottom: 14px; }
     .pill{
       display:inline-block;
       padding: 10px 16px;
@@ -67,7 +55,7 @@
       background: rgba(255,255,255,.7);
       box-shadow: 0 6px 14px rgba(0,0,0,.08);
       color: var(--brand);
-      font-weight: 700;
+      font-weight: 800;
       letter-spacing:.2px;
     }
     .sub{
@@ -77,11 +65,11 @@
       line-height:1.35;
     }
 
-    /* ====== Main ====== */
+    /* Main */
     .uploadBox{
-      margin: 18px auto 14px;
+      margin: 18px auto 12px;
       width: 100%;
-      height: 210px;
+      height: 220px;
       border-radius: 16px;
       background: rgba(255,255,255,.65);
       border: 2px solid rgba(177,43,98,.35);
@@ -121,19 +109,6 @@
       background: rgba(255,255,255,.85);
       outline:none;
     }
-    .btn{
-      width:100%;
-      height: 42px;
-      border:none;
-      border-radius: 999px;
-      cursor:pointer;
-      font-weight:800;
-      letter-spacing:.4px;
-      box-shadow: 0 10px 18px rgba(0,0,0,.12);
-    }
-    .btn.primary{ background: var(--btn); color:#fff; }
-    .btn.secondary{ background: var(--btn2); color:#fff; margin-top: 10px; }
-
     .smallBtn{
       display:inline-flex;
       align-items:center;
@@ -144,10 +119,30 @@
       padding: 8px 12px;
       font-size: 12px;
       cursor:pointer;
+      user-select:none;
     }
     .smallBtn input{ display:none; }
 
-    /* ====== Gallery ====== */
+    .btn{
+      width:100%;
+      height: 44px;
+      border:none;
+      border-radius: 999px;
+      cursor:pointer;
+      font-weight: 900;
+      letter-spacing:.4px;
+      box-shadow: 0 10px 18px rgba(0,0,0,.12);
+      margin-top: 10px;
+    }
+    .btn.primary{ background: var(--btn); color:#fff; }
+    .btn.ghost{
+      background: rgba(255,255,255,.75);
+      color: rgba(59,43,49,.85);
+      border: 1px solid rgba(0,0,0,.12);
+      box-shadow:none;
+    }
+
+    /* Gallery */
     .backLink{
       display:inline-block;
       font-size: 12px;
@@ -157,25 +152,19 @@
       margin: 2px 0 10px;
     }
     .galleryScroll{
-      height: 520px;
+      height: 560px;
       overflow-y: auto;
       padding-right: 6px; /* scrollbar spacing */
     }
-
-    /* heart list container */
     .heartStack{
       position: relative;
-      height: 1100px; /* bigger than viewport so scroll works */
+      height: 1200px; /* scroll area */
       width: 100%;
     }
 
-    /* ====== Heart Card (flip) ====== */
+    /* Heart flip card */
     .heartCard{
       position:absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 170px;
-      height: 155px;
       perspective: 900px;
       cursor:pointer;
       user-select:none;
@@ -187,31 +176,27 @@
       transform-style: preserve-3d;
       transition: transform 700ms ease;
     }
-    .heartCard.showBack .heartInner{
-      transform: rotateY(180deg);
-    }
+    .heartCard.showBack .heartInner{ transform: rotateY(180deg); }
 
     .heartFace{
       position:absolute;
       inset:0;
       backface-visibility: hidden;
-      border-radius: 18px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
       filter: drop-shadow(0 12px 14px rgba(0,0,0,.14));
     }
+    .heartBack{ transform: rotateY(180deg); }
 
-    /* Heart shape using mask (works on Chromium/Edge/Safari) */
+    /* Heart shape (mask) */
     .heartShape{
       width:100%;
       height:100%;
       background: rgba(255,255,255,.92);
       overflow:hidden;
       border: 1px solid rgba(0,0,0,.06);
+      border-radius: 18px;
       -webkit-mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 90'><path d='M50 82C25 66 8 51 8 32C8 19 18 10 31 10C39 10 46 14 50 20C54 14 61 10 69 10C82 10 92 19 92 32C92 51 75 66 50 82Z' fill='black'/></svg>");
       -webkit-mask-size: 100% 100%;
-      -webkit-mask-repeat: no-repeat;
+      -webkit-mask-repeat:no-repeat;
       mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 90'><path d='M50 82C25 66 8 51 8 32C8 19 18 10 31 10C39 10 46 14 50 20C54 14 61 10 69 10C82 10 92 19 92 32C92 51 75 66 50 82Z' fill='black'/></svg>");
       mask-size: 100% 100%;
       mask-repeat:no-repeat;
@@ -220,18 +205,12 @@
       justify-content:center;
       position:relative;
     }
-
     .heartShape img{
       width:100%;
       height:100%;
       object-fit:cover;
       display:block;
     }
-
-    .heartBack{
-      transform: rotateY(180deg);
-    }
-
     .heartText{
       width: 78%;
       text-align:center;
@@ -239,21 +218,17 @@
       font-size: 12px;
       line-height:1.25;
       padding: 8px 6px;
+      white-space: pre-wrap;
     }
     .heartText .nick{
       display:block;
-      font-weight: 800;
-      color: rgba(59,43,49,.9);
+      font-weight: 900;
       margin-bottom: 6px;
       font-size: 12px;
     }
-    .heartText .msg{
-      font-size: 11.5px;
-      color: rgba(59,43,49,.8);
-    }
 
-    /* ====== Detail Modal Page ====== */
-    .blurBg{
+    /* Detail (modal-style overlay inside page) */
+    .overlay{
       position:absolute;
       inset:0;
       background: rgba(255,255,255,.35);
@@ -261,10 +236,10 @@
       display:flex;
       align-items:center;
       justify-content:center;
-      padding: 20px;
+      padding: 18px;
     }
     .detailCard{
-      width: 88%;
+      width: 92%;
       background: rgba(255,255,255,.92);
       border-radius: 16px;
       box-shadow: var(--shadow);
@@ -279,27 +254,19 @@
       width: 28px;
       height: 28px;
       border-radius: 999px;
-      border: none;
+      border:none;
       background: rgba(0,0,0,.08);
       cursor:pointer;
-      font-weight:900;
+      font-weight: 900;
     }
     .detailImg{
-      height: 260px;
+      height: 280px;
       width:100%;
       background:#eee;
       overflow:hidden;
     }
-    .detailImg img{
-      width:100%;
-      height:100%;
-      object-fit:cover;
-      display:block;
-    }
-    .detailBody{
-      padding: 12px 14px 14px;
-      text-align:center;
-    }
+    .detailImg img{ width:100%; height:100%; object-fit:cover; display:block; }
+    .detailBody{ padding: 12px 14px 14px; text-align:center; }
     .tag{
       font-size: 11px;
       letter-spacing:.5px;
@@ -317,7 +284,7 @@
       justify-content:center;
       gap:8px;
       background: rgba(255,255,255,.85);
-      font-weight: 700;
+      font-weight: 800;
       color: rgba(59,43,49,.85);
       font-size: 12px;
     }
@@ -351,399 +318,344 @@
       color: rgba(59,43,49,.55);
       padding-bottom: 6px;
     }
-
-    /* tiny headings (optional) */
-    .miniTitle{
-      position:absolute;
-      top: -18px;
-      left: 6px;
-      font-size: 12px;
-      color: rgba(0,0,0,.45);
-    }
-
-    /* demo layout labels on the outside */
-    .phoneWrap{ position:relative; }
   </style>
 </head>
 
 <body>
-  <div class="app">
+  <div class="phone">
     <!-- MAIN -->
-    <div class="phoneWrap">
-      <div class="miniTitle">main page</div>
-      <div class="phone" id="phoneMain">
-        <section class="page active" id="page-main">
-          <div class="top">
-            <div class="pill">Share Love Joy Hope</div>
-            <div class="sub">Share your own<br/>LOVE · JOY · HOPE moment here.</div>
-          </div>
-
-          <div class="uploadBox" id="previewBox">
-            <img id="previewImg" alt="preview"/>
-            <div class="hint" id="previewHint">Upload your image</div>
-          </div>
-
-          <div class="row">
-            <label>Image</label>
-            <label class="smallBtn">
-              ⬆ Upload image
-              <input type="file" id="fileInput" accept="image/*" />
-            </label>
-          </div>
-
-          <div class="row">
-            <label>Nickname (10 chars max)</label>
-            <input type="text" id="nickInput" maxlength="10" placeholder="Please enter a nickname" />
-          </div>
-
-          <div class="row">
-            <label>Description (30 chars max)</label>
-            <input type="text" id="msgInput" maxlength="30" placeholder="Please write a short description" />
-          </div>
-
-          <button class="btn primary" id="submitBtn">♡ CLICK TO UPLOAD ♡</button>
-          <button class="btn secondary" id="goGalleryBtn">VIEW THE GALLERY</button>
-        </section>
+    <section class="page active" id="page-main">
+      <div class="top">
+        <div class="pill">Share Love Joy Hope</div>
+        <div class="sub">Share your own<br/>LOVE · JOY · HOPE moment here.</div>
       </div>
-    </div>
+
+      <div class="uploadBox">
+        <img id="previewImg" alt="preview" />
+        <div class="hint" id="previewHint">Upload your image</div>
+      </div>
+
+      <div class="row">
+        <label>Image</label>
+        <label class="smallBtn">
+          ⬆ Upload image
+          <input type="file" id="fileInput" accept="image/*" />
+        </label>
+      </div>
+
+      <div class="row">
+        <label>Nickname (10 chars max)</label>
+        <input type="text" id="nickInput" maxlength="10" placeholder="Please enter a nickname" />
+      </div>
+
+      <div class="row">
+        <label>Description (30 chars max)</label>
+        <input type="text" id="msgInput" maxlength="30" placeholder="Please write a short description" />
+      </div>
+
+      <button class="btn primary" id="submitAndGo">♡ CLICK TO UPLOAD ♡</button>
+      <button class="btn ghost" id="justGoGallery">VIEW THE GALLERY</button>
+    </section>
 
     <!-- GALLERY -->
-    <div class="phoneWrap">
-      <div class="miniTitle">gallery</div>
-      <div class="phone" id="phoneGallery">
-        <section class="page active" id="page-gallery">
-          <div class="top">
-            <div class="pill" style="font-size:12px;padding:10px 14px;">
-              Share your own<br/>LOVE · JOY · HOPE moment here.
-            </div>
-          </div>
-
-          <div class="backLink" id="backToMain">← BACK</div>
-
-          <div class="galleryScroll" id="galleryScroll">
-            <div class="heartStack" id="heartStack">
-              <!-- hearts injected here -->
-            </div>
-          </div>
-        </section>
-
-        <section class="page" id="page-detail">
-          <div class="blurBg">
-            <div class="detailCard">
-              <button class="closeX" id="closeDetail">X</button>
-              <div class="detailImg"><img id="detailImg" alt="detail"/></div>
-              <div class="detailBody">
-                <div class="tag">FROM</div>
-                <div class="fromPill"><span class="avatarDot"></span><span id="detailNick">Nick</span></div>
-                <div class="detailMsg" id="detailMsg">Message</div>
-                <div class="date" id="detailDate">YYYY / MM / DD</div>
-              </div>
-            </div>
-          </div>
-        </section>
+    <section class="page" id="page-gallery">
+      <div class="top">
+        <div class="pill" style="font-size:12px;padding:10px 14px;">
+          Share your own<br/>LOVE · JOY · HOPE moment here.
+        </div>
       </div>
-    </div>
 
-    <!-- DETAIL (preview only like your 3rd screen) -->
-    <div class="phoneWrap">
-      <div class="miniTitle">detail</div>
-      <div class="phone" id="phoneDetailPreview">
-        <!-- This phone mirrors the detail page visually (static preview) -->
-        <section class="page active">
-          <div class="top">
-            <div class="pill" style="font-size:12px;padding:10px 14px;">
-              Share your own<br/>LOVE · JOY · HOPE moment here.
-            </div>
-          </div>
-          <div class="sub" style="text-align:center;margin-top:6px;">(Detail opens when you click a heart)</div>
+      <div class="backLink" id="backToMain">← BACK</div>
 
-          <div class="blurBg" style="margin-top:10px; position:relative; inset:auto; height: 500px;">
-            <div class="detailCard" style="transform: scale(.98);">
-              <button class="closeX" disabled>X</button>
-              <div class="detailImg">
-                <img alt="placeholder"
-                  src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='800' height='600'><rect width='100%25' height='100%25' fill='%23ddd'/><text x='50%25' y='50%25' font-size='28' text-anchor='middle' fill='%23666' font-family='Arial'>Preview</text></svg>"/>
-              </div>
-              <div class="detailBody">
-                <div class="tag">FROM</div>
-                <div class="fromPill"><span class="avatarDot"></span><span>Celco</span></div>
-                <div class="detailMsg">Happy birthday!<br/>Yogurtland :)</div>
-                <div class="date">2026 / 06 / 27</div>
-              </div>
-            </div>
-          </div>
-        </section>
+      <div class="galleryScroll">
+        <div class="heartStack" id="heartStack"></div>
       </div>
-    </div>
+    </section>
 
+    <!-- DETAIL -->
+    <section class="page" id="page-detail">
+      <div class="top">
+        <div class="pill" style="font-size:12px;padding:10px 14px;">
+          Share your own<br/>LOVE · JOY · HOPE moment here.
+        </div>
+      </div>
+
+      <div class="overlay">
+        <div class="detailCard">
+          <button class="closeX" id="closeDetail">X</button>
+          <div class="detailImg"><img id="detailImg" alt="detail"/></div>
+          <div class="detailBody">
+            <div class="tag">FROM</div>
+            <div class="fromPill"><span class="avatarDot"></span><span id="detailNick">Nick</span></div>
+            <div class="detailMsg" id="detailMsg">Message</div>
+            <div class="date" id="detailDate">YYYY / MM / DD</div>
+          </div>
+        </div>
+      </div>
+    </section>
   </div>
 
-  <script>
-    /***************
-     * Data Model
-     ***************/
-    const LS_KEY = "yl_entries_v1";
+<script>
+  /***************
+   * Storage + Data
+   ***************/
+  const LS_KEY = "yl_entries_v2";
 
-    /** entry: { id, nick, msg, imgDataUrl, createdAt } */
-    function loadEntries(){
-      try{
-        const raw = localStorage.getItem(LS_KEY);
-        if(!raw) return seedEntries();
-        const parsed = JSON.parse(raw);
-        if(!Array.isArray(parsed)) return seedEntries();
-        return parsed;
-      }catch{
-        return seedEntries();
-      }
+  /** entry: { id, nick, msg, imgDataUrl, createdAt } */
+  function loadEntries(){
+    try{
+      const raw = localStorage.getItem(LS_KEY);
+      if(!raw) return seedEntries();
+      const arr = JSON.parse(raw);
+      if(!Array.isArray(arr)) return seedEntries();
+      return arr;
+    }catch{
+      return seedEntries();
     }
-    function saveEntries(entries){
-      localStorage.setItem(LS_KEY, JSON.stringify(entries));
-    }
+  }
+  function saveEntries(entries){ localStorage.setItem(LS_KEY, JSON.stringify(entries)); }
 
-    // demo seed so gallery isn't empty
-    function seedEntries(){
-      const demo = [
-        {
-          id: crypto.randomUUID(),
-          nick: "YOYO",
-          msg: "the place I often come\nwith my mom",
-          imgDataUrl: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='800' height='800'><defs><linearGradient id='g' x1='0' x2='1'><stop offset='0' stop-color='%23f1b7c5'/><stop offset='1' stop-color='%23b12b62'/></linearGradient></defs><rect width='100%25' height='100%25' fill='url(%23g)'/><circle cx='400' cy='330' r='170' fill='rgba(255,255,255,.35)'/><text x='50%25' y='55%25' font-size='44' text-anchor='middle' fill='white' font-family='Arial'>Demo Photo</text></svg>",
-          createdAt: Date.now() - 86400000 * 2
-        },
-        {
-          id: crypto.randomUUID(),
-          nick: "Celco",
-          msg: "Happy birthday!\nYogurtland :)",
-          imgDataUrl: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='800' height='800'><rect width='100%25' height='100%25' fill='%23c9d9ff'/><rect x='70' y='90' width='660' height='620' rx='40' fill='rgba(255,255,255,.55)'/><text x='50%25' y='52%25' font-size='40' text-anchor='middle' fill='%233c5bb6' font-family='Arial'>Demo Photo</text></svg>",
-          createdAt: Date.now() - 86400000 * 5
-        }
-      ];
-      saveEntries(demo);
-      return demo;
-    }
-
-    /***************
-     * Elements
-     ***************/
-    const fileInput = document.getElementById("fileInput");
-    const previewImg = document.getElementById("previewImg");
-    const previewHint = document.getElementById("previewHint");
-    const nickInput = document.getElementById("nickInput");
-    const msgInput  = document.getElementById("msgInput");
-    const submitBtn = document.getElementById("submitBtn");
-    const goGalleryBtn = document.getElementById("goGalleryBtn");
-    const backToMain = document.getElementById("backToMain");
-
-    const heartStack = document.getElementById("heartStack");
-    const pageGallery = document.getElementById("page-gallery");
-    const pageDetail  = document.getElementById("page-detail");
-
-    const detailImg  = document.getElementById("detailImg");
-    const detailNick = document.getElementById("detailNick");
-    const detailMsg  = document.getElementById("detailMsg");
-    const detailDate = document.getElementById("detailDate");
-    const closeDetail = document.getElementById("closeDetail");
-
-    let currentUploadDataUrl = "";
-    let entries = loadEntries();
-    let flipTimer = null;
-
-    /***************
-     * Main: upload preview
-     ***************/
-    fileInput.addEventListener("change", async (e) => {
-      const file = e.target.files?.[0];
-      if(!file) return;
-
-      const dataUrl = await readAsDataURL(file);
-      currentUploadDataUrl = dataUrl;
-
-      previewImg.src = dataUrl;
-      previewImg.style.display = "block";
-      previewHint.style.display = "none";
-    });
-
-    function readAsDataURL(file){
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-      });
-    }
-
-    submitBtn.addEventListener("click", () => {
-      const nick = nickInput.value.trim();
-      const msg  = msgInput.value.trim();
-
-      if(!currentUploadDataUrl){
-        alert("Please upload an image.");
-        return;
-      }
-      if(!nick){
-        alert("Please enter a nickname.");
-        return;
-      }
-      if(!msg){
-        alert("Please write a short description.");
-        return;
-      }
-
-      const newEntry = {
+  function seedEntries(){
+    const demo = [
+      {
         id: crypto.randomUUID(),
-        nick,
-        msg,
-        imgDataUrl: currentUploadDataUrl,
-        createdAt: Date.now()
-      };
+        nick: "YOYO",
+        msg: "the place I often come\nwith my mom",
+        imgDataUrl:
+          "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='800' height='800'><defs><linearGradient id='g' x1='0' x2='1'><stop offset='0' stop-color='%23f1b7c5'/><stop offset='1' stop-color='%23b12b62'/></linearGradient></defs><rect width='100%25' height='100%25' fill='url(%23g)'/><circle cx='400' cy='330' r='170' fill='rgba(255,255,255,.35)'/><text x='50%25' y='55%25' font-size='44' text-anchor='middle' fill='white' font-family='Arial'>Demo Photo</text></svg>",
+        createdAt: Date.now() - 86400000 * 2
+      },
+      {
+        id: crypto.randomUUID(),
+        nick: "Celco",
+        msg: "Happy birthday!\nYogurtland :)",
+        imgDataUrl:
+          "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='800' height='800'><rect width='100%25' height='100%25' fill='%23c9d9ff'/><rect x='70' y='90' width='660' height='620' rx='40' fill='rgba(255,255,255,.55)'/><text x='50%25' y='52%25' font-size='40' text-anchor='middle' fill='%233c5bb6' font-family='Arial'>Demo Photo</text></svg>",
+        createdAt: Date.now() - 86400000 * 5
+      }
+    ];
+    saveEntries(demo);
+    return demo;
+  }
 
-      entries = [newEntry, ...entries];
-      saveEntries(entries);
+  /***************
+   * Elements
+   ***************/
+  const pageMain   = document.getElementById("page-main");
+  const pageGallery= document.getElementById("page-gallery");
+  const pageDetail = document.getElementById("page-detail");
 
-      // reset inputs
-      nickInput.value = "";
-      msgInput.value = "";
-      fileInput.value = "";
-      currentUploadDataUrl = "";
-      previewImg.style.display = "none";
-      previewHint.style.display = "block";
+  const fileInput  = document.getElementById("fileInput");
+  const previewImg = document.getElementById("previewImg");
+  const previewHint= document.getElementById("previewHint");
+  const nickInput  = document.getElementById("nickInput");
+  const msgInput   = document.getElementById("msgInput");
 
-      renderGallery();
-      showGallery();
+  const submitAndGo   = document.getElementById("submitAndGo");
+  const justGoGallery = document.getElementById("justGoGallery");
+  const backToMain    = document.getElementById("backToMain");
+
+  const heartStack = document.getElementById("heartStack");
+
+  const closeDetail = document.getElementById("closeDetail");
+  const detailImg   = document.getElementById("detailImg");
+  const detailNick  = document.getElementById("detailNick");
+  const detailMsg   = document.getElementById("detailMsg");
+  const detailDate  = document.getElementById("detailDate");
+
+  let entries = loadEntries();
+  let currentUploadDataUrl = "";
+  let flipTimer = null;
+
+  /***************
+   * Navigation
+   ***************/
+  function show(page){
+    [pageMain, pageGallery, pageDetail].forEach(p => p.classList.remove("active"));
+    page.classList.add("active");
+  }
+
+  /***************
+   * Main: upload preview
+   ***************/
+  fileInput.addEventListener("change", async (e) => {
+    const file = e.target.files?.[0];
+    if(!file) return;
+
+    const dataUrl = await readAsDataURL(file);
+    currentUploadDataUrl = dataUrl;
+
+    previewImg.src = dataUrl;
+    previewImg.style.display = "block";
+    previewHint.style.display = "none";
+  });
+
+  function readAsDataURL(file){
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
     });
+  }
 
-    goGalleryBtn.addEventListener("click", () => {
-      renderGallery();
-      showGallery();
-    });
+  submitAndGo.addEventListener("click", () => {
+    const nick = nickInput.value.trim();
+    const msg  = msgInput.value.trim();
 
-    backToMain.addEventListener("click", () => {
-      showMain();
-    });
-
-    closeDetail.addEventListener("click", () => {
-      showGallery(); // go back to gallery list inside same phone
-    });
-
-    /***************
-     * Page switching (within Gallery phone)
-     ***************/
-    function showMain(){
-      // nothing to toggle: main phone is separate
-      // but we can scroll attention to left if needed
-      // (kept simple)
+    if(!currentUploadDataUrl){
+      alert("Please upload an image.");
+      return;
+    }
+    if(!nick){
+      alert("Please enter a nickname.");
+      return;
+    }
+    if(!msg){
+      alert("Please write a short description.");
+      return;
     }
 
-    function showGallery(){
-      pageDetail.classList.remove("active");
-      pageGallery.classList.add("active");
-    }
+    const newEntry = {
+      id: crypto.randomUUID(),
+      nick,
+      msg,
+      imgDataUrl: currentUploadDataUrl,
+      createdAt: Date.now()
+    };
 
-    function showDetail(entry){
-      pageGallery.classList.remove("active");
-      pageDetail.classList.add("active");
+    entries = [newEntry, ...entries];
+    saveEntries(entries);
 
-      detailImg.src = entry.imgDataUrl;
-      detailNick.textContent = entry.nick;
-      detailMsg.textContent = entry.msg;
+    // reset main inputs
+    nickInput.value = "";
+    msgInput.value = "";
+    fileInput.value = "";
+    currentUploadDataUrl = "";
+    previewImg.style.display = "none";
+    previewHint.style.display = "block";
 
-      const d = new Date(entry.createdAt);
-      const yyyy = d.getFullYear();
-      const mm = String(d.getMonth()+1).padStart(2,"0");
-      const dd = String(d.getDate()).padStart(2,"0");
-      detailDate.textContent = `${yyyy} / ${mm} / ${dd}`;
-    }
+    renderGallery();
+    show(pageGallery);
+  });
 
-    /***************
-     * Gallery render + positions + flip every 3s
-     ***************/
-    function renderGallery(){
-      heartStack.innerHTML = "";
+  justGoGallery.addEventListener("click", () => {
+    renderGallery();
+    show(pageGallery);
+  });
 
-      // fixed positions to mimic “same position / same size”
-      // (you can tweak these values to match your mock exactly)
-      const positions = [
-        { top:  40, leftPct: 35, size: 170 },
-        { top: 175, leftPct: 65, size: 170 },
-        { top: 310, leftPct: 35, size: 170 },
-        { top: 445, leftPct: 65, size: 170 },
-        { top: 580, leftPct: 35, size: 170 },
-        { top: 715, leftPct: 65, size: 170 },
-        { top: 850, leftPct: 50, size: 170 },
-        { top: 985, leftPct: 35, size: 170 },
-      ];
+  backToMain.addEventListener("click", () => {
+    show(pageMain);
+  });
 
-      const shown = entries.slice(0, 12); // demo cap
-      shown.forEach((entry, idx) => {
-        const pos = positions[idx % positions.length];
+  /***************
+   * Detail
+   ***************/
+  closeDetail.addEventListener("click", () => {
+    show(pageGallery);
+  });
 
-        const card = document.createElement("div");
-        card.className = "heartCard";
-        card.style.top = pos.top + "px";
-        card.style.left = pos.leftPct + "%";
-        card.style.width = pos.size + "px";
-        card.style.height = Math.round(pos.size * 0.91) + "px";
-        card.dataset.id = entry.id;
+  function openDetail(entry){
+    detailImg.src = entry.imgDataUrl;
+    detailNick.textContent = entry.nick;
+    detailMsg.textContent = entry.msg;
 
-        card.innerHTML = `
-          <div class="heartInner">
-            <!-- FRONT (photo) -->
-            <div class="heartFace heartFront">
-              <div class="heartShape">
-                <img alt="photo" src="${entry.imgDataUrl}">
-              </div>
+    const d = new Date(entry.createdAt);
+    const yyyy = d.getFullYear();
+    const mm = String(d.getMonth()+1).padStart(2,"0");
+    const dd = String(d.getDate()).padStart(2,"0");
+    detailDate.textContent = `${yyyy} / ${mm} / ${dd}`;
+
+    show(pageDetail);
+  }
+
+  /***************
+   * Gallery render + fixed positions + 3s flip loop
+   ***************/
+  function renderGallery(){
+    heartStack.innerHTML = "";
+
+    // fixed positions (same location / size)
+    const positions = [
+      { top:  55, leftPct: 38, size: 175 },
+      { top: 190, leftPct: 66, size: 175 },
+      { top: 325, leftPct: 38, size: 175 },
+      { top: 460, leftPct: 66, size: 175 },
+      { top: 595, leftPct: 38, size: 175 },
+      { top: 730, leftPct: 66, size: 175 },
+      { top: 865, leftPct: 52, size: 175 },
+      { top: 1000,leftPct: 38, size: 175 },
+    ];
+
+    const shown = entries.slice(0, 16);
+    shown.forEach((entry, idx) => {
+      const pos = positions[idx % positions.length];
+
+      const card = document.createElement("div");
+      card.className = "heartCard";
+      card.style.top  = pos.top + "px";
+      card.style.left = pos.leftPct + "%";
+      card.style.transform = "translateX(-50%)";
+      card.style.width  = pos.size + "px";
+      card.style.height = Math.round(pos.size * 0.92) + "px";
+
+      card.innerHTML = `
+        <div class="heartInner">
+          <!-- FRONT (photo) -->
+          <div class="heartFace heartFront">
+            <div class="heartShape">
+              <img alt="photo" src="${entry.imgDataUrl}">
             </div>
+          </div>
 
-            <!-- BACK (text) -->
-            <div class="heartFace heartBack">
-              <div class="heartShape">
-                <div class="heartText">
-                  <span class="nick">${escapeHtml(entry.nick)}</span>
-                  <span class="msg">${escapeHtml(entry.msg).replaceAll("\\n","<br/>")}</span>
-                </div>
+          <!-- BACK (text) -->
+          <div class="heartFace heartBack">
+            <div class="heartShape">
+              <div class="heartText">
+                <span class="nick">${escapeHtml(entry.nick)}</span>
+                <span class="msg">${escapeHtml(entry.msg)}</span>
               </div>
             </div>
           </div>
-        `;
+        </div>
+      `;
 
-        card.addEventListener("click", () => {
-          showDetail(entry);
-        });
+      // 클릭하면 detail 화면으로
+      card.addEventListener("click", () => openDetail(entry));
 
-        heartStack.appendChild(card);
+      heartStack.appendChild(card);
+    });
+
+    startFlipLoop();
+  }
+
+  function startFlipLoop(){
+    if(flipTimer) clearInterval(flipTimer);
+
+    // initial: show photo
+    document.querySelectorAll(".heartCard").forEach(c => c.classList.remove("showBack"));
+
+    // 3초마다: photo -> text -> photo -> text...
+    let back = false;
+    flipTimer = setInterval(() => {
+      back = !back;
+      document.querySelectorAll(".heartCard").forEach(c => {
+        c.classList.toggle("showBack", back);
       });
+    }, 3000);
+  }
 
-      startFlipLoop();
-    }
+  function escapeHtml(s){
+    return String(s)
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#039;");
+  }
 
-    function startFlipLoop(){
-      if(flipTimer) clearInterval(flipTimer);
-
-      // 초기 상태: 사진(front)이 보이도록 showBack 제거
-      document.querySelectorAll(".heartCard").forEach(c => c.classList.remove("showBack"));
-
-      // 3초마다 전부 토글: 사진(3s) -> 글(3s) -> 사진(3s) ...
-      let back = false;
-      flipTimer = setInterval(() => {
-        back = !back;
-        document.querySelectorAll(".heartCard").forEach(c => {
-          c.classList.toggle("showBack", back);
-        });
-      }, 3000);
-    }
-
-    function escapeHtml(s){
-      return String(s)
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
-    }
-
-    // initial
-    renderGallery();
-  </script>
+  // init
+  renderGallery();
+</script>
 </body>
 </html>
-
