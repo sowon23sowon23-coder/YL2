@@ -8,26 +8,24 @@
     :root{
       --bg1:#f6e7eb;
       --bg2:#f3cfd8;
-      --card:#ffffff;
       --ink:#3b2b31;
       --muted:#7a6a71;
       --brand:#b12b62;
       --btn:#5a2c57;
-      --btn2:#3c5bb6;
       --shadow: 0 10px 24px rgba(0,0,0,.12);
     }
     *{ box-sizing:border-box; }
     body{
       margin:0;
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background: #eee;
+      background:#eee;
       display:flex;
       justify-content:center;
-      padding: 22px;
-      color: var(--ink);
+      padding:22px;
+      color:var(--ink);
     }
 
-    /* Single App (one flow) */
+    /* single flow phone */
     .phone{
       width: 340px;
       max-width: 95vw;
@@ -47,30 +45,30 @@
     }
     .page.active{ display:block; }
 
-    .top{ text-align:center; margin-bottom: 14px; }
+    .top{ text-align:center; margin-bottom:14px; }
     .pill{
       display:inline-block;
-      padding: 10px 16px;
-      border-radius: 14px;
+      padding:10px 16px;
+      border-radius:14px;
       background: rgba(255,255,255,.7);
       box-shadow: 0 6px 14px rgba(0,0,0,.08);
       color: var(--brand);
-      font-weight: 800;
+      font-weight:900;
       letter-spacing:.2px;
     }
     .sub{
-      margin-top: 10px;
-      font-size: 12px;
-      color: var(--muted);
+      margin-top:10px;
+      font-size:12px;
+      color:var(--muted);
       line-height:1.35;
     }
 
-    /* Main */
+    /* main */
     .uploadBox{
       margin: 18px auto 12px;
-      width: 100%;
-      height: 220px;
-      border-radius: 16px;
+      width:100%;
+      height:220px;
+      border-radius:16px;
       background: rgba(255,255,255,.65);
       border: 2px solid rgba(177,43,98,.35);
       display:flex;
@@ -79,45 +77,33 @@
       position:relative;
       overflow:hidden;
     }
-    .uploadBox img{
-      width:100%;
-      height:100%;
-      object-fit:cover;
-      display:none;
-    }
+    .uploadBox img{ width:100%; height:100%; object-fit:cover; display:none; }
     .uploadBox .hint{
       position:absolute;
       text-align:center;
       padding: 0 12px;
       color: rgba(59,43,49,.55);
-      font-size: 13px;
+      font-size:13px;
     }
 
-    .row{ margin: 10px 0; }
-    label{
-      display:block;
-      font-size: 12px;
-      color: var(--muted);
-      margin-bottom: 6px;
-    }
+    .row{ margin:10px 0; }
+    label{ display:block; font-size:12px; color:var(--muted); margin-bottom:6px; }
     input[type="text"]{
       width:100%;
-      height: 38px;
-      border-radius: 999px;
-      border: 1px solid rgba(0,0,0,.12);
-      padding: 0 14px;
+      height:38px;
+      border-radius:999px;
+      border:1px solid rgba(0,0,0,.12);
+      padding:0 14px;
       background: rgba(255,255,255,.85);
       outline:none;
     }
     .smallBtn{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
+      display:inline-flex; align-items:center; gap:8px;
       border:1px solid rgba(0,0,0,.12);
       background: rgba(255,255,255,.85);
-      border-radius: 999px;
-      padding: 8px 12px;
-      font-size: 12px;
+      border-radius:999px;
+      padding:8px 12px;
+      font-size:12px;
       cursor:pointer;
       user-select:none;
     }
@@ -125,16 +111,17 @@
 
     .btn{
       width:100%;
-      height: 44px;
+      height:44px;
       border:none;
-      border-radius: 999px;
+      border-radius:999px;
       cursor:pointer;
-      font-weight: 900;
+      font-weight:900;
       letter-spacing:.4px;
       box-shadow: 0 10px 18px rgba(0,0,0,.12);
-      margin-top: 10px;
+      margin-top:10px;
+      background: var(--btn);
+      color:#fff;
     }
-    .btn.primary{ background: var(--btn); color:#fff; }
     .btn.ghost{
       background: rgba(255,255,255,.75);
       color: rgba(59,43,49,.85);
@@ -142,27 +129,27 @@
       box-shadow:none;
     }
 
-    /* Gallery */
+    /* gallery */
     .backLink{
       display:inline-block;
-      font-size: 12px;
+      font-size:12px;
       color: rgba(59,43,49,.7);
       cursor:pointer;
       user-select:none;
       margin: 2px 0 10px;
     }
     .galleryScroll{
-      height: 560px;
-      overflow-y: auto;
-      padding-right: 6px; /* scrollbar spacing */
+      height:560px;
+      overflow-y:auto;
+      padding-right:6px;
     }
     .heartStack{
-      position: relative;
-      height: 1200px; /* scroll area */
-      width: 100%;
+      position:relative;
+      height:1200px;
+      width:100%;
     }
 
-    /* Heart flip card */
+    /* heart flip card */
     .heartCard{
       position:absolute;
       perspective: 900px;
@@ -181,12 +168,12 @@
     .heartFace{
       position:absolute;
       inset:0;
-      backface-visibility: hidden;
+      backface-visibility:hidden;
       filter: drop-shadow(0 12px 14px rgba(0,0,0,.14));
     }
     .heartBack{ transform: rotateY(180deg); }
 
-    /* Heart shape (mask) */
+    /* heart mask */
     .heartShape{
       width:100%;
       height:100%;
@@ -195,10 +182,10 @@
       border: 1px solid rgba(0,0,0,.06);
       border-radius: 18px;
       -webkit-mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 90'><path d='M50 82C25 66 8 51 8 32C8 19 18 10 31 10C39 10 46 14 50 20C54 14 61 10 69 10C82 10 92 19 92 32C92 51 75 66 50 82Z' fill='black'/></svg>");
-      -webkit-mask-size: 100% 100%;
+      -webkit-mask-size:100% 100%;
       -webkit-mask-repeat:no-repeat;
       mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 90'><path d='M50 82C25 66 8 51 8 32C8 19 18 10 31 10C39 10 46 14 50 20C54 14 61 10 69 10C82 10 92 19 92 32C92 51 75 66 50 82Z' fill='black'/></svg>");
-      mask-size: 100% 100%;
+      mask-size:100% 100%;
       mask-repeat:no-repeat;
       display:flex;
       align-items:center;
@@ -211,23 +198,38 @@
       object-fit:cover;
       display:block;
     }
-    .heartText{
+
+    /* ✅ centered text inside heart */
+    .heartTextWrap{
       width: 78%;
+      height: 78%;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
       text-align:center;
-      color: rgba(59,43,49,.85);
-      font-size: 12px;
-      line-height:1.25;
+      gap:8px;
       padding: 8px 6px;
-      white-space: pre-wrap;
     }
-    .heartText .nick{
-      display:block;
-      font-weight: 900;
-      margin-bottom: 6px;
-      font-size: 12px;
+    .heartNick{
+      font-weight:900;
+      line-height:1.1;
+      color: rgba(59,43,49,.92);
+      font-size: 13px;
+      max-width: 100%;
+      word-break: break-word;
+    }
+    .heartMsg{
+      font-weight:600;
+      color: rgba(59,43,49,.82);
+      line-height:1.18;
+      max-width: 100%;
+      word-break: break-word;
+      white-space: pre-wrap;
+      /* font-size is auto-set by JS to fit */
     }
 
-    /* Detail (modal-style overlay inside page) */
+    /* detail */
     .overlay{
       position:absolute;
       inset:0;
@@ -236,12 +238,12 @@
       display:flex;
       align-items:center;
       justify-content:center;
-      padding: 18px;
+      padding:18px;
     }
     .detailCard{
-      width: 92%;
+      width:92%;
       background: rgba(255,255,255,.92);
-      border-radius: 16px;
+      border-radius:16px;
       box-shadow: var(--shadow);
       overflow:hidden;
       border:1px solid rgba(0,0,0,.08);
@@ -249,80 +251,54 @@
     }
     .closeX{
       position:absolute;
-      right: 10px;
-      top: 10px;
-      width: 28px;
-      height: 28px;
-      border-radius: 999px;
+      right:10px;
+      top:10px;
+      width:28px;
+      height:28px;
+      border-radius:999px;
       border:none;
       background: rgba(0,0,0,.08);
       cursor:pointer;
-      font-weight: 900;
+      font-weight:900;
     }
-    .detailImg{
-      height: 280px;
-      width:100%;
-      background:#eee;
-      overflow:hidden;
-    }
+    .detailImg{ height:280px; width:100%; background:#eee; overflow:hidden; }
     .detailImg img{ width:100%; height:100%; object-fit:cover; display:block; }
-    .detailBody{ padding: 12px 14px 14px; text-align:center; }
-    .tag{
-      font-size: 11px;
-      letter-spacing:.5px;
-      color: rgba(59,43,49,.6);
-      margin-bottom: 8px;
-    }
+    .detailBody{ padding:12px 14px 14px; text-align:center; }
+    .tag{ font-size:11px; letter-spacing:.5px; color: rgba(59,43,49,.6); margin-bottom:8px; }
     .fromPill{
-      margin: 0 auto 10px;
-      width: 70%;
-      height: 36px;
-      border-radius: 999px;
-      border: 1px solid rgba(0,0,0,.12);
+      margin:0 auto 10px;
+      width:70%;
+      height:36px;
+      border-radius:999px;
+      border:1px solid rgba(0,0,0,.12);
       display:flex;
       align-items:center;
       justify-content:center;
       gap:8px;
       background: rgba(255,255,255,.85);
-      font-weight: 800;
+      font-weight:900;
       color: rgba(59,43,49,.85);
-      font-size: 12px;
+      font-size:12px;
     }
     .avatarDot{
-      width: 18px;
-      height: 18px;
-      border-radius: 999px;
-      background: rgba(177,43,98,.18);
-      display:inline-block;
-      position:relative;
+      width:18px;height:18px;border-radius:999px;background: rgba(177,43,98,.18);
+      display:inline-block; position:relative;
     }
     .avatarDot::after{
       content:"";
-      position:absolute;
-      left:50%;
-      top:52%;
+      position:absolute; left:50%; top:52%;
       transform: translate(-50%,-50%);
       width:8px;height:8px;border-radius:999px;
       background: rgba(177,43,98,.55);
     }
-    .detailMsg{
-      font-size: 12px;
-      color: rgba(59,43,49,.85);
-      line-height:1.35;
-      margin-bottom: 10px;
-      padding: 0 8px;
-      white-space: pre-wrap;
-    }
-    .date{
-      font-size: 11px;
-      color: rgba(59,43,49,.55);
-      padding-bottom: 6px;
-    }
+    .detailMsg{ font-size:12px; color: rgba(59,43,49,.85); line-height:1.35; margin-bottom:10px; padding:0 8px; white-space:pre-wrap; }
+    .date{ font-size:11px; color: rgba(59,43,49,.55); padding-bottom:6px; }
   </style>
 </head>
 
 <body>
   <div class="phone">
+
     <!-- MAIN -->
     <section class="page active" id="page-main">
       <div class="top">
@@ -353,7 +329,7 @@
         <input type="text" id="msgInput" maxlength="30" placeholder="Please write a short description" />
       </div>
 
-      <button class="btn primary" id="submitAndGo">♡ CLICK TO UPLOAD ♡</button>
+      <button class="btn" id="submitAndGo">♡ CLICK TO UPLOAD ♡</button>
       <button class="btn ghost" id="justGoGallery">VIEW THE GALLERY</button>
     </section>
 
@@ -393,15 +369,15 @@
         </div>
       </div>
     </section>
+
   </div>
 
 <script>
   /***************
    * Storage + Data
    ***************/
-  const LS_KEY = "yl_entries_v2";
+  const LS_KEY = "yl_entries_v3";
 
-  /** entry: { id, nick, msg, imgDataUrl, createdAt } */
   function loadEntries(){
     try{
       const raw = localStorage.getItem(LS_KEY);
@@ -441,15 +417,15 @@
   /***************
    * Elements
    ***************/
-  const pageMain   = document.getElementById("page-main");
-  const pageGallery= document.getElementById("page-gallery");
-  const pageDetail = document.getElementById("page-detail");
+  const pageMain    = document.getElementById("page-main");
+  const pageGallery = document.getElementById("page-gallery");
+  const pageDetail  = document.getElementById("page-detail");
 
-  const fileInput  = document.getElementById("fileInput");
-  const previewImg = document.getElementById("previewImg");
-  const previewHint= document.getElementById("previewHint");
-  const nickInput  = document.getElementById("nickInput");
-  const msgInput   = document.getElementById("msgInput");
+  const fileInput   = document.getElementById("fileInput");
+  const previewImg  = document.getElementById("previewImg");
+  const previewHint = document.getElementById("previewHint");
+  const nickInput   = document.getElementById("nickInput");
+  const msgInput    = document.getElementById("msgInput");
 
   const submitAndGo   = document.getElementById("submitAndGo");
   const justGoGallery = document.getElementById("justGoGallery");
@@ -503,18 +479,9 @@
     const nick = nickInput.value.trim();
     const msg  = msgInput.value.trim();
 
-    if(!currentUploadDataUrl){
-      alert("Please upload an image.");
-      return;
-    }
-    if(!nick){
-      alert("Please enter a nickname.");
-      return;
-    }
-    if(!msg){
-      alert("Please write a short description.");
-      return;
-    }
+    if(!currentUploadDataUrl){ alert("Please upload an image."); return; }
+    if(!nick){ alert("Please enter a nickname."); return; }
+    if(!msg){ alert("Please write a short description."); return; }
 
     const newEntry = {
       id: crypto.randomUUID(),
@@ -527,7 +494,7 @@
     entries = [newEntry, ...entries];
     saveEntries(entries);
 
-    // reset main inputs
+    // reset
     nickInput.value = "";
     msgInput.value = "";
     fileInput.value = "";
@@ -544,16 +511,12 @@
     show(pageGallery);
   });
 
-  backToMain.addEventListener("click", () => {
-    show(pageMain);
-  });
+  backToMain.addEventListener("click", () => show(pageMain));
 
   /***************
    * Detail
    ***************/
-  closeDetail.addEventListener("click", () => {
-    show(pageGallery);
-  });
+  closeDetail.addEventListener("click", () => show(pageGallery));
 
   function openDetail(entry){
     detailImg.src = entry.imgDataUrl;
@@ -570,24 +533,27 @@
   }
 
   /***************
-   * Gallery render + fixed positions + 3s flip loop
+   * Gallery render
+   * ✅ Left hearts start with TEXT
+   * ✅ Right hearts start with PHOTO
+   * ✅ Text is centered, auto-shrinks to fit
    ***************/
   function renderGallery(){
     heartStack.innerHTML = "";
 
-    // fixed positions (same location / size)
     const positions = [
-      { top:  55, leftPct: 38, size: 175 },
-      { top: 190, leftPct: 66, size: 175 },
-      { top: 325, leftPct: 38, size: 175 },
-      { top: 460, leftPct: 66, size: 175 },
-      { top: 595, leftPct: 38, size: 175 },
-      { top: 730, leftPct: 66, size: 175 },
-      { top: 865, leftPct: 52, size: 175 },
-      { top: 1000,leftPct: 38, size: 175 },
+      { top:  55, leftPct: 36, size: 175, side:"left"  },
+      { top: 190, leftPct: 68, size: 175, side:"right" },
+      { top: 325, leftPct: 36, size: 175, side:"left"  },
+      { top: 460, leftPct: 68, size: 175, side:"right" },
+      { top: 595, leftPct: 36, size: 175, side:"left"  },
+      { top: 730, leftPct: 68, size: 175, side:"right" },
+      { top: 865, leftPct: 52, size: 175, side:"left"  },
+      { top: 1000,leftPct: 36, size: 175, side:"right" },
     ];
 
     const shown = entries.slice(0, 16);
+
     shown.forEach((entry, idx) => {
       const pos = positions[idx % positions.length];
 
@@ -598,49 +564,84 @@
       card.style.transform = "translateX(-50%)";
       card.style.width  = pos.size + "px";
       card.style.height = Math.round(pos.size * 0.92) + "px";
+      card.dataset.side = pos.side;
+
+      // start state:
+      // - showBack = TEXT
+      // - left hearts: text first => showBack true
+      // - right hearts: photo first => showBack false
+      if(pos.side === "left"){
+        card.classList.add("showBack");
+      }
 
       card.innerHTML = `
         <div class="heartInner">
-          <!-- FRONT (photo) -->
+          <!-- FRONT: photo -->
           <div class="heartFace heartFront">
             <div class="heartShape">
               <img alt="photo" src="${entry.imgDataUrl}">
             </div>
           </div>
 
-          <!-- BACK (text) -->
+          <!-- BACK: text -->
           <div class="heartFace heartBack">
             <div class="heartShape">
-              <div class="heartText">
-                <span class="nick">${escapeHtml(entry.nick)}</span>
-                <span class="msg">${escapeHtml(entry.msg)}</span>
+              <div class="heartTextWrap">
+                <div class="heartNick">${escapeHtml(entry.nick)}</div>
+                <div class="heartMsg">${escapeHtml(entry.msg)}</div>
               </div>
             </div>
           </div>
         </div>
       `;
 
-      // 클릭하면 detail 화면으로
       card.addEventListener("click", () => openDetail(entry));
-
       heartStack.appendChild(card);
+    });
+
+    // ✅ auto-fit text in each heart (shrink font if needed)
+    requestAnimationFrame(() => {
+      document.querySelectorAll(".heartCard").forEach(card => fitHeartText(card));
     });
 
     startFlipLoop();
   }
 
+  function fitHeartText(card){
+    const wrap = card.querySelector(".heartTextWrap");
+    const msgEl = card.querySelector(".heartMsg");
+    if(!wrap || !msgEl) return;
+
+    // available height is wrap height; shrink message font until it fits
+    // (nickname fixed-ish; message shrinks)
+    const maxFont = 12;
+    const minFont = 8;
+
+    let font = maxFont;
+    msgEl.style.fontSize = font + "px";
+
+    // give layout a tick
+    for(let i=0; i<20; i++){
+      const fits = wrap.scrollHeight <= wrap.clientHeight;
+      if(fits) break;
+      font -= 0.5;
+      if(font < minFont){ font = minFont; break; }
+      msgEl.style.fontSize = font + "px";
+    }
+  }
+
+  /***************
+   * Flip loop (3 seconds)
+   * Left & right both flip every 3s, but start state differs:
+   * - left: text first
+   * - right: photo first
+   ***************/
   function startFlipLoop(){
     if(flipTimer) clearInterval(flipTimer);
 
-    // initial: show photo
-    document.querySelectorAll(".heartCard").forEach(c => c.classList.remove("showBack"));
-
-    // 3초마다: photo -> text -> photo -> text...
-    let back = false;
     flipTimer = setInterval(() => {
-      back = !back;
-      document.querySelectorAll(".heartCard").forEach(c => {
-        c.classList.toggle("showBack", back);
+      document.querySelectorAll(".heartCard").forEach(card => {
+        card.classList.toggle("showBack"); // toggles between photo<->text
       });
     }, 3000);
   }
