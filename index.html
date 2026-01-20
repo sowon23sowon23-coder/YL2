@@ -444,6 +444,10 @@
   </div>
 
 <script>
+  const SUPABASE_URL = "너의 프로젝트 URL";
+const SUPABASE_ANON_KEY = "너의 anon key";
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
   /***************
    * Storage + Data
    ***************/
@@ -803,5 +807,7 @@ if(isScreenMode){
 
   renderGallery();
 </script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 </body>
 </html>
