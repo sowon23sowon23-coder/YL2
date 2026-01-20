@@ -398,7 +398,21 @@
   const SUPABASE_URL = "https://jhkeupkswnqeytroliwn.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_dCtuDm5n0rmgxcouaWY55Q_2PbiVAYA";
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+async function uploadImageToSupabase(file){
+  const ext = (file.name.split(".").pop() || "jpg").toLowerCase();
+  const path = `public/${Date.now()}_${crypto.randomUUID()}.${ext}`;
 
+  const { data: uploadData, error: upErr } = await supabase.storage
+    .from("yl-images")
+    .upload(path, file, { cacheControl: "3600", upsert: false });
+
+  if (upErr) throw upErr;
+
+  const { data } = supabase.storage.from("yl-images").getPublicUrl(path);
+  return data.publicUrl;
+}
+
+}
   /***************
    * Storage + Data
    ***************/
@@ -418,24 +432,7 @@ const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   function saveEntries(entries){ localStorage.setItem(LS_KEY, JSON.stringify(entries)); }
 
   function seedEntries(){
-    const demo = [
-      {
-        id: crypto.randomUUID(),
-        nick: "YOYO",
-        msg: "the place I often come\nwith my mom",
-        imgDataUrl:
-          "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='800' height='800'><defs><linearGradient id='g' x1='0' x2='1'><stop offset='0' stop-color='%23f1b7c5'/><stop offset='1' stop-color='%23b12b62'/></linearGradient></defs><rect width='100%25' height='100%25' fill='url(%23g)'/><circle cx='400' cy='330' r='170' fill='rgba(255,255,255,.35)'/><text x='50%25' y='55%25' font-size='44' text-anchor='middle' fill='white' font-family='Arial'>Demo Photo</text></svg>",
-        createdAt: Date.now() - 86400000 * 2
-      },
-      {
-        id: crypto.randomUUID(),
-        nick: "Celco",
-        msg: "Happy birthday!\nYogurtland :)",
-        imgDataUrl:
-          "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='800' height='800'><rect width='100%25' height='100%25' fill='%23c9d9ff'/><rect x='70' y='90' width='660' height='620' rx='40' fill='rgba(255,255,255,.55)'/><text x='50%25' y='52%25' font-size='40' text-anchor='middle' fill='%233c5bb6' font-family='Arial'>Demo Photo</text></svg>",
-        createdAt: Date.now() - 86400000 * 5
-      }
-    ];
+
     saveEntries(demo);
     return demo;
   }
