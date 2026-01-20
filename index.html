@@ -312,58 +312,7 @@
     .detailMsg{ font-size:12px; color: rgba(59,43,49,.85); line-height:1.35; margin-bottom:10px; padding:0 8px; white-space:pre-wrap; }
     .date{ font-size:11px; color: rgba(59,43,49,.55); padding-bottom:6px; }
   </style>
-  /* SCREEN mode */
-#screen{
-  width: 100vw;
-  height: 100vh;
-  background: linear-gradient(var(--bg1), var(--bg2));
-  color: var(--ink);
-  padding: 4vh 5vw;
-}
-.screenTop{
-  display:flex;
-  align-items:flex-end;
-  justify-content:space-between;
-  margin-bottom: 3vh;
-}
-.screenTitle{
-  font-size: 4.2vw;
-  font-weight: 900;
-  color: var(--brand);
-}
-.screenSub{ font-size: 1.6vw; color: var(--muted); }
 
-.slideWrap{
-  display:grid;
-  grid-template-columns: 1.2fr 1fr;
-  gap: 3vw;
-  height: 78vh;
-  align-items:center;
-}
-#screenImg{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  border-radius: 24px;
-  box-shadow: var(--shadow);
-  border: 1px solid rgba(0,0,0,.08);
-  background:#fff;
-}
-.screenText{
-  background: rgba(255,255,255,.65);
-  border: 1px solid rgba(0,0,0,.08);
-  border-radius: 24px;
-  box-shadow: var(--shadow);
-  padding: 3vw;
-  height: 100%;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-}
-.screenNick{ font-size: 3vw; font-weight: 900; margin-bottom: 1.2vh; }
-.screenMsg{ font-size: 2.2vw; font-weight: 650; line-height: 1.25; white-space: pre-wrap; }
-.screenDate{ margin-top: 2vh; font-size: 1.4vw; color: var(--muted); }
-.screenHint{ position:fixed; bottom: 2vh; right: 3vw; font-size: 1.2vw; color: rgba(59,43,49,.55); }
 
 </head>
 
@@ -444,8 +393,8 @@
   </div>
 
 <script>
-  const SUPABASE_URL = "너의 프로젝트 URL";
-const SUPABASE_ANON_KEY = "너의 anon key";
+  const SUPABASE_URL = "https://jhkeupkswnqeytroliwn.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_dCtuDm5n0rmgxcouaWY55Q_2PbiVAYA";
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   /***************
