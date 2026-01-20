@@ -351,6 +351,8 @@
 
       <button class="btn" id="submitAndGo">♡ CLICK TO UPLOAD ♡</button>
       <button class="btn ghost" id="justGoGallery">VIEW THE GALLERY</button>
+    
+
     </section>
 
     <!-- GALLERY -->
@@ -393,12 +395,17 @@
   </div>
 
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+
+
+  
+</script>
   <script>
   const SUPABASE_URL = "https://jhkeupkswnqeytroliwn.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_dCtuDm5n0rmgxcouaWY55Q_2PbiVAYA";
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 async function uploadImageToSupabase(file){
+
   const ext = (file.name.split(".").pop() || "jpg").toLowerCase();
   const path = `public/${Date.now()}_${crypto.randomUUID()}.${ext}`;
 
@@ -410,6 +417,28 @@ async function uploadImageToSupabase(file){
 
   const { data } = supabase.storage.from("yl-images").getPublicUrl(path);
   return data.publicUrl;
+}
+async function saveEntryToDB({ nickname, description, imageurl }) {
+  const { error } = await supabase
+    .from("yl_entries")
+    .insert([{
+      nickname,
+      description: description || null,
+      image_url: imageurl
+    }]);
+
+  if (error) throw error;
+}
+
+async function fetchEntriesFromDB(limit = 60) {
+  const { data, error } = await supabase
+    .from("yl_entries")
+    .select("id, nickname, description, image_url, created_at")
+    .order("created_at", { ascending: false })
+    .limit(limit);
+
+  if (error) throw error;
+  return data || [];
 }
 
 }
@@ -754,6 +783,9 @@ if(isScreenMode){
 }
 
   renderGallery();
+document.getElementById("submitAndGo").addEventListener("click", handleUploadClick);
+
+    
 </script>
 
 
