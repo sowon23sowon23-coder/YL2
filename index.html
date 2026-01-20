@@ -37,23 +37,6 @@
       overflow:hidden;
       position:relative;
     }
-    <section id="screen" style="display:none;">
-  <div class="screenTop">
-    <div class="screenTitle">Share Love Joy Hope</div>
-    <div class="screenSub">Scan QR to upload</div>
-  </div>
-
-  <div class="slideWrap">
-    <img id="screenImg" alt="slide"/>
-    <div class="screenText">
-      <div id="screenNick" class="screenNick"></div>
-      <div id="screenMsg" class="screenMsg"></div>
-      <div id="screenDate" class="screenDate"></div>
-    </div>
-  </div>
-
-  <div class="screenHint">Press F11 for fullscreen</div>
-</section>
 
     .page{
       position:absolute;
@@ -217,7 +200,7 @@
       display:block;
     }
 
-    /* ✅ centered text inside heart */
+    /* centered text inside heart */
     .heartTextWrap{
       width: 78%;
       height: 78%;
@@ -244,7 +227,6 @@
       max-width: 100%;
       word-break: break-word;
       white-space: pre-wrap;
-      /* font-size is auto-set by JS to fit */
     }
 
     /* detail */
@@ -311,12 +293,114 @@
     }
     .detailMsg{ font-size:12px; color: rgba(59,43,49,.85); line-height:1.35; margin-bottom:10px; padding:0 8px; white-space:pre-wrap; }
     .date{ font-size:11px; color: rgba(59,43,49,.55); padding-bottom:6px; }
+
+    /* SCREEN MODE */
+    #screen{
+      width:min(1100px, 98vw);
+      height:min(720px, 92vh);
+      border-radius:18px;
+      background: linear-gradient(var(--bg1), var(--bg2));
+      box-shadow: var(--shadow);
+      border:1px solid rgba(0,0,0,.08);
+      padding:22px;
+      display:none;
+      position:relative;
+      overflow:hidden;
+    }
+    .screenTop{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:14px;
+    }
+    .screenTitle{
+      font-weight:900;
+      color: var(--brand);
+      font-size:26px;
+      letter-spacing:.2px;
+    }
+    .screenSub{
+      color: rgba(59,43,49,.65);
+      font-weight:700;
+      font-size:14px;
+    }
+    .slideWrap{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:18px;
+      height: calc(100% - 60px);
+      align-items:stretch;
+    }
+    #screenImg{
+      width:100%;
+      height:100%;
+      object-fit:contain;
+      background: rgba(255,255,255,.55);
+      border-radius:16px;
+      border:1px solid rgba(0,0,0,.08);
+    }
+    .screenText{
+      background: rgba(255,255,255,.7);
+      border-radius:16px;
+      border:1px solid rgba(0,0,0,.08);
+      padding:18px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      gap:12px;
+    }
+    .screenNick{
+      font-size:28px;
+      font-weight:900;
+      color: rgba(59,43,49,.92);
+    }
+    .screenMsg{
+      font-size:22px;
+      font-weight:700;
+      color: rgba(59,43,49,.85);
+      white-space:pre-wrap;
+      line-height:1.25;
+    }
+    .screenDate{
+      margin-top:8px;
+      color: rgba(59,43,49,.6);
+      font-weight:700;
+      font-size:14px;
+    }
+    .screenHint{
+      position:absolute;
+      right:16px;
+      bottom:14px;
+      color: rgba(59,43,49,.55);
+      font-size:12px;
+      font-weight:700;
+    }
   </style>
-
-
 </head>
 
 <body>
+
+  <!-- SCREEN MODE UI -->
+  <section id="screen">
+    <div class="screenTop">
+      <div class="screenTitle">Share Love Joy Hope</div>
+      <div class="screenSub">Scan QR to upload</div>
+    </div>
+
+    <div class="slideWrap">
+      <img id="screenImg" alt="slide"/>
+      <div class="screenText">
+        <div id="screenNick" class="screenNick"></div>
+        <div id="screenMsg" class="screenMsg"></div>
+        <div id="screenDate" class="screenDate"></div>
+      </div>
+    </div>
+
+    <div class="screenHint">Press F11 for fullscreen</div>
+  </section>
+
+  <!-- PHONE UI -->
   <div class="phone">
 
     <!-- MAIN -->
@@ -351,8 +435,6 @@
 
       <button class="btn" id="submitAndGo">♡ CLICK TO UPLOAD ♡</button>
       <button class="btn ghost" id="justGoGallery">VIEW THE GALLERY</button>
-    
-
     </section>
 
     <!-- GALLERY -->
@@ -394,400 +476,230 @@
 
   </div>
 
+  <!-- ✅ Supabase SDK: script tag는 반드시 이렇게 "닫힘"이 있어야 해 -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
-
-
-  
-</script>
   <script>
-  const SUPABASE_URL = "https://jhkeupkswnqeytroliwn.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_dCtuDm5n0rmgxcouaWY55Q_2PbiVAYA";
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-async function uploadImageToSupabase(file){
+    /***********************
+     * Supabase Config
+     ***********************/
+    const SUPABASE_URL = "https://jhkeupkswnqeytroliwn.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_dCtuDm5n0rmgxcouaWY55Q_2PbiVAYA";
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  const ext = (file.name.split(".").pop() || "jpg").toLowerCase();
-  const path = `public/${Date.now()}_${crypto.randomUUID()}.${ext}`;
+    /***********************
+     * Supabase Storage Upload
+     ***********************/
+    async function uploadImageToSupabase(file){
+      const ext = (file.name.split(".").pop() || "jpg").toLowerCase();
+      const path = `public/${Date.now()}_${crypto.randomUUID()}.${ext}`;
 
-  const { data: uploadData, error: upErr } = await supabase.storage
-    .from("yl-images")
-    .upload(path, file, { cacheControl: "3600", upsert: false });
+      const { error: upErr } = await supabase.storage
+        .from("yl-images")
+        .upload(path, file, { cacheControl: "3600", upsert: false });
 
-  if (upErr) throw upErr;
+      if (upErr) throw upErr;
 
-  const { data } = supabase.storage.from("yl-images").getPublicUrl(path);
-  return data.publicUrl;
-}
-async function saveEntryToDB({ nickname, description, imageurl }) {
-  const { error } = await supabase
-    .from("yl_entries")
-    .insert([{
-      nickname,
-      description: description || null,
-      image_url: imageurl
-    }]);
-
-  if (error) throw error;
-}
-
-async function fetchEntriesFromDB(limit = 60) {
-  const { data, error } = await supabase
-    .from("yl_entries")
-    .select("id, nickname, description, image_url, created_at")
-    .order("created_at", { ascending: false })
-    .limit(limit);
-
-  if (error) throw error;
-  return data || [];
-}
-
-}
-  /***************
-   * Storage + Data
-   ***************/
-  const LS_KEY = "yl_entries_v3";
-
-  function loadEntries(){
-    try{
-      const raw = localStorage.getItem(LS_KEY);
-      if(!raw) return seedEntries();
-      const arr = JSON.parse(raw);
-      if(!Array.isArray(arr)) return seedEntries();
-      return arr;
-    }catch{
-      return seedEntries();
+      const { data } = supabase.storage.from("yl-images").getPublicUrl(path);
+      return data.publicUrl;
     }
-  }
-  function saveEntries(entries){ localStorage.setItem(LS_KEY, JSON.stringify(entries)); }
 
-  function seedEntries(){
-
-    saveEntries(demo);
-    return demo;
-  }
-
-  /***************
-   * Elements
-   ***************/
-  const pageMain    = document.getElementById("page-main");
-  const pageGallery = document.getElementById("page-gallery");
-  const pageDetail  = document.getElementById("page-detail");
-
-  const fileInput   = document.getElementById("fileInput");
-  const previewImg  = document.getElementById("previewImg");
-  const previewHint = document.getElementById("previewHint");
-  const nickInput   = document.getElementById("nickInput");
-  const msgInput    = document.getElementById("msgInput");
-
-  const submitAndGo   = document.getElementById("submitAndGo");
-  const justGoGallery = document.getElementById("justGoGallery");
-  const backToMain    = document.getElementById("backToMain");
-
-  const heartStack = document.getElementById("heartStack");
-
-  const closeDetail = document.getElementById("closeDetail");
-  const detailImg   = document.getElementById("detailImg");
-  const detailNick  = document.getElementById("detailNick");
-  const detailMsg   = document.getElementById("detailMsg");
-  const detailDate  = document.getElementById("detailDate");
-
-  let entries = loadEntries();
-  let currentUploadDataUrl = "";
-  let flipTimer = null;
-
-  /***************
-   * Navigation
-   ***************/
-  function show(page){
-    [pageMain, pageGallery, pageDetail].forEach(p => p.classList.remove("active"));
-    page.classList.add("active");
-  }
-
-  /***************
-   * Main: upload preview
-   ***************/
-  fileInput.addEventListener("change", async (e) => {
-    const file = e.target.files?.[0];
-    if(!file) return;
-
-    const dataUrl = await readAsDataURL(file);
-    currentUploadDataUrl = dataUrl;
-
-    previewImg.src = dataUrl;
-    previewImg.style.display = "block";
-    previewHint.style.display = "none";
-  });
-
-  function readAsDataURL(file){
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = reject;
-      reader.readAsDataURL(file);
-    });
-  }
-
-  submitAndGo.addEventListener("click", () => {
-    const nick = nickInput.value.trim();
-    const msg  = msgInput.value.trim();
-
-    if(!currentUploadDataUrl){ alert("Please upload an image."); return; }
-    if(!nick){ alert("Please enter a nickname."); return; }
-    if(!msg){ alert("Please write a short description."); return; }
-
-    const newEntry = {
-      id: crypto.randomUUID(),
-      nick,
-      msg,
-      imgDataUrl: currentUploadDataUrl,
-      createdAt: Date.now()
-    };
-
-    entries = [newEntry, ...entries];
-    saveEntries(entries);
-
-    // reset
-    nickInput.value = "";
-    msgInput.value = "";
-    fileInput.value = "";
-    currentUploadDataUrl = "";
-    previewImg.style.display = "none";
-    previewHint.style.display = "block";
-
-    renderGallery();
-    show(pageGallery);
-  });
-
-  justGoGallery.addEventListener("click", () => {
-    renderGallery();
-    show(pageGallery);
-  });
-
-  backToMain.addEventListener("click", () => show(pageMain));
-
-  /***************
-   * Detail
-   ***************/
-  closeDetail.addEventListener("click", () => show(pageGallery));
-
-  function openDetail(entry){
-    detailImg.src = entry.imgDataUrl;
-    detailNick.textContent = entry.nick;
-    detailMsg.textContent = entry.msg;
-
-    const d = new Date(entry.createdAt);
-    const yyyy = d.getFullYear();
-    const mm = String(d.getMonth()+1).padStart(2,"0");
-    const dd = String(d.getDate()).padStart(2,"0");
-    detailDate.textContent = `${yyyy} / ${mm} / ${dd}`;
-
-    show(pageDetail);
-  }
-
-  /***************
-   * Gallery render
-   * ✅ Left hearts start with TEXT
-   * ✅ Right hearts start with PHOTO
-   * ✅ Text is centered, auto-shrinks to fit
-   ***************/
-  function renderGallery(){
-    heartStack.innerHTML = "";
-
-    const positions = [
-      { top:  55, leftPct: 36, size: 175, side:"left"  },
-      { top: 190, leftPct: 68, size: 175, side:"right" },
-      { top: 325, leftPct: 36, size: 175, side:"left"  },
-      { top: 460, leftPct: 68, size: 175, side:"right" },
-      { top: 595, leftPct: 36, size: 175, side:"left"  },
-      { top: 730, leftPct: 68, size: 175, side:"right" },
-      { top: 865, leftPct: 52, size: 175, side:"left"  },
-      { top: 1000,leftPct: 36, size: 175, side:"right" },
-    ];
-
-    const shown = entries.slice(0, 16);
-
-    shown.forEach((entry, idx) => {
-      const pos = positions[idx % positions.length];
-
-      const card = document.createElement("div");
-      card.className = "heartCard";
-      card.style.top  = pos.top + "px";
-      card.style.left = pos.leftPct + "%";
-      card.style.transform = "translateX(-50%)";
-      card.style.width  = pos.size + "px";
-      card.style.height = Math.round(pos.size * 0.92) + "px";
-      card.dataset.side = pos.side;
-
-      // start state:
-      // - showBack = TEXT
-      // - left hearts: text first => showBack true
-      // - right hearts: photo first => showBack false
-      if(pos.side === "left"){
-        card.classList.add("showBack");
-      }
-
-      card.innerHTML = `
-        <div class="heartInner">
-          <!-- FRONT: photo -->
-          <div class="heartFace heartFront">
-            <div class="heartShape">
-              <img alt="photo" src="${entry.imgDataUrl}">
-            </div>
-          </div>
-
-          <!-- BACK: text -->
-          <div class="heartFace heartBack">
-            <div class="heartShape">
-              <div class="heartTextWrap">
-                <div class="heartNick">${escapeHtml(entry.nick)}</div>
-                <div class="heartMsg">${escapeHtml(entry.msg)}</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      `;
-
-      card.addEventListener("click", () => openDetail(entry));
-      heartStack.appendChild(card);
-    });
-
-    // ✅ auto-fit text in each heart (shrink font if needed)
-    requestAnimationFrame(() => {
-      document.querySelectorAll(".heartCard").forEach(card => fitHeartText(card));
-    });
-
-    startFlipLoop();
-  }
-
-  function fitHeartText(card){
-    const wrap = card.querySelector(".heartTextWrap");
-    const msgEl = card.querySelector(".heartMsg");
-    if(!wrap || !msgEl) return;
-
-    // available height is wrap height; shrink message font until it fits
-    // (nickname fixed-ish; message shrinks)
-    const maxFont = 12;
-    const minFont = 8;
-
-    let font = maxFont;
-    msgEl.style.fontSize = font + "px";
-
-    // give layout a tick
-    for(let i=0; i<20; i++){
-      const fits = wrap.scrollHeight <= wrap.clientHeight;
-      if(fits) break;
-      font -= 0.5;
-      if(font < minFont){ font = minFont; break; }
-      msgEl.style.fontSize = font + "px";
+    /***********************
+     * Supabase DB (yl_entries)
+     ***********************/
+    async function saveEntryToDB({ nickname, description, imageUrl }) {
+      const { error } = await supabase
+        .from("yl_entries")
+        .insert([{
+          nickname,
+          description: description || null,
+          image_url: imageUrl
+        }]);
+      if (error) throw error;
     }
-  }
 
-  /***************
-   * Flip loop (3 seconds)
-   * Left & right both flip every 3s, but start state differs:
-   * - left: text first
-   * - right: photo first
-   ***************/
-  function startFlipLoop(){
-    if(flipTimer) clearInterval(flipTimer);
+    async function fetchEntriesFromDB(limit = 60) {
+      const { data, error } = await supabase
+        .from("yl_entries")
+        .select("id, nickname, description, image_url, created_at")
+        .order("created_at", { ascending: false })
+        .limit(limit);
 
-    flipTimer = setInterval(() => {
-      document.querySelectorAll(".heartCard").forEach(card => {
-        card.classList.toggle("showBack"); // toggles between photo<->text
+      if (error) throw error;
+      return data || [];
+    }
+
+    function mapDbRowToEntry(row){
+      return {
+        id: row.id,
+        nick: row.nickname,
+        msg: row.description || "",
+        imgUrl: row.image_url,
+        createdAt: new Date(row.created_at).getTime()
+      };
+    }
+
+    /***********************
+     * Elements
+     ***********************/
+    const pageMain    = document.getElementById("page-main");
+    const pageGallery = document.getElementById("page-gallery");
+    const pageDetail  = document.getElementById("page-detail");
+
+    const fileInput   = document.getElementById("fileInput");
+    const previewImg  = document.getElementById("previewImg");
+    const previewHint = document.getElementById("previewHint");
+    const nickInput   = document.getElementById("nickInput");
+    const msgInput    = document.getElementById("msgInput");
+
+    const submitAndGo   = document.getElementById("submitAndGo");
+    const justGoGallery = document.getElementById("justGoGallery");
+    const backToMain    = document.getElementById("backToMain");
+
+    const heartStack = document.getElementById("heartStack");
+
+    const closeDetail = document.getElementById("closeDetail");
+    const detailImg   = document.getElementById("detailImg");
+    const detailNick  = document.getElementById("detailNick");
+    const detailMsg   = document.getElementById("detailMsg");
+    const detailDate  = document.getElementById("detailDate");
+
+    // screen
+    const isScreenMode = new URLSearchParams(location.search).get("mode") === "screen";
+    const screenEl   = document.getElementById("screen");
+    const phoneEl    = document.querySelector(".phone");
+    const screenImg  = document.getElementById("screenImg");
+    const screenNick = document.getElementById("screenNick");
+    const screenMsg  = document.getElementById("screenMsg");
+    const screenDate = document.getElementById("screenDate");
+
+    /***********************
+     * State
+     ***********************/
+    let entries = [];
+    let flipTimer = null;
+
+    // upload state
+    let selectedFile = null;
+    let currentUploadPreviewUrl = "";
+
+    /***********************
+     * Navigation
+     ***********************/
+    function show(page){
+      [pageMain, pageGallery, pageDetail].forEach(p => p.classList.remove("active"));
+      page.classList.add("active");
+    }
+
+    /***********************
+     * Helpers
+     ***********************/
+    function escapeHtml(s){
+      return String(s)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    function formatDate(ts){
+      const d = new Date(ts);
+      const yyyy = d.getFullYear();
+      const mm = String(d.getMonth()+1).padStart(2,"0");
+      const dd = String(d.getDate()).padStart(2,"0");
+      return `${yyyy} / ${mm} / ${dd}`;
+    }
+
+    async function refreshFromDB(){
+      const rows = await fetchEntriesFromDB(60);
+      entries = rows.map(mapDbRowToEntry);
+    }
+
+    /***********************
+     * Main: preview
+     ***********************/
+    fileInput.addEventListener("change", async (e) => {
+      const file = e.target.files?.[0];
+      if(!file) return;
+
+      selectedFile = file;
+
+      const previewUrl = await readAsDataURL(file);
+      currentUploadPreviewUrl = previewUrl;
+
+      previewImg.src = previewUrl;
+      previewImg.style.display = "block";
+      previewHint.style.display = "none";
+    });
+
+    function readAsDataURL(file){
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
       });
-    }, 3000);
-  }
-
-  function escapeHtml(s){
-    return String(s)
-      .replaceAll("&","&amp;")
-      .replaceAll("<","&lt;")
-      .replaceAll(">","&gt;")
-      .replaceAll('"',"&quot;")
-      .replaceAll("'","&#039;");
-  }
-
-  // init
-  const isScreenMode = new URLSearchParams(location.search).get("mode") === "screen";
-
-const screenEl = document.getElementById("screen");
-const phoneEl  = document.querySelector(".phone");
-
-const screenImg  = document.getElementById("screenImg");
-const screenNick = document.getElementById("screenNick");
-const screenMsg  = document.getElementById("screenMsg");
-const screenDate = document.getElementById("screenDate");
-
-let slideIdx = 0;
-let slideTimer = null;
-let refreshTimer = null;
-
-function formatDate(ts){
-  const d = new Date(ts);
-  const yyyy = d.getFullYear();
-  const mm = String(d.getMonth()+1).padStart(2,"0");
-  const dd = String(d.getDate()).padStart(2,"0");
-  return `${yyyy} / ${mm} / ${dd}`;
-}
-
-function renderSlide(){
-  // 최신순(이미 entries가 최신순으로 쌓이지만, 안전하게 정렬)
-  const sorted = [...entries].sort((a,b) => b.createdAt - a.createdAt);
-  if(sorted.length === 0) return;
-
-  if(slideIdx >= sorted.length) slideIdx = 0;
-  const e = sorted[slideIdx];
-
-  screenImg.src = e.imgDataUrl;
-  screenNick.textContent = e.nick;
-  screenMsg.textContent  = e.msg;
-  screenDate.textContent = formatDate(e.createdAt);
-}
-
-function startScreenSlideshow(){
-  // 7초마다 다음(원하면 5~8초로 조절)
-  if(slideTimer) clearInterval(slideTimer);
-  slideTimer = setInterval(() => {
-    slideIdx += 1;
-    renderSlide();
-  }, 7000);
-
-  // 3초마다 entries 다시 읽기 (localStorage 기반 “같은 PC 탭” 갱신용)
-  if(refreshTimer) clearInterval(refreshTimer);
-  refreshTimer = setInterval(() => {
-    entries = loadEntries();
-    renderSlide();
-  }, 3000);
-
-  // 같은 PC에서 다른 탭이 저장하면 즉시 반영
-  window.addEventListener("storage", (ev) => {
-    if(ev.key === LS_KEY){
-      entries = loadEntries();
-      slideIdx = 0; // 새 글 들어오면 최신부터 다시 보여주기
-      renderSlide();
     }
-  });
 
-  renderSlide();
-}
+    /***********************
+     * Upload -> Storage -> DB -> Refresh
+     ***********************/
+    async function handleUploadClick(){
+      const nick = nickInput.value.trim();
+      const msg  = msgInput.value.trim();
 
-if(isScreenMode){
-  // phone UI 숨기고 screen UI로 전환
-  phoneEl.style.display = "none";
-  screenEl.style.display = "block";
+      if(!selectedFile){ alert("Please upload an image."); return; }
+      if(!nick){ alert("Please enter a nickname."); return; }
+      if(!msg){ alert("Please write a short description."); return; }
 
-  // 갤러리 flip 루프 같은 건 굳이 안 돌아도 됨
-  if(flipTimer) clearInterval(flipTimer);
+      submitAndGo.disabled = true;
+      submitAndGo.textContent = "Uploading...";
 
-  startScreenSlideshow();
-}
+      try{
+        const imageUrl = await uploadImageToSupabase(selectedFile);
+        await saveEntryToDB({ nickname: nick, description: msg, imageUrl });
 
-  renderGallery();
-document.getElementById("submitAndGo").addEventListener("click", handleUploadClick);
+        // reset inputs
+        nickInput.value = "";
+        msgInput.value = "";
+        fileInput.value = "";
+        selectedFile = null;
+        currentUploadPreviewUrl = "";
+        previewImg.style.display = "none";
+        previewHint.style.display = "block";
 
-    
-</script>
+        await refreshFromDB();
+        renderGallery();
+        show(pageGallery);
+      }catch(e){
+        console.error(e);
+        alert("Upload failed. Check console.");
+      }finally{
+        submitAndGo.disabled = false;
+        submitAndGo.textContent = "♡ CLICK TO UPLOAD ♡";
+      }
+    }
 
+    /***********************
+     * Buttons
+     ***********************/
+    submitAndGo.addEventListener("click", handleUploadClick);
 
-</body>
-</html>
+    justGoGallery.addEventListener("click", async () => {
+      try{
+        await refreshFromDB();
+        renderGallery();
+        show(pageGallery);
+      }catch(e){
+        console.error(e);
+        alert("Failed to load gallery.");
+      }
+    });
+
+    backToMain.addEventListener("click", () => show(pageMain));
+
+    /***********************
+     * Detail
+     ***********************/
+    close
