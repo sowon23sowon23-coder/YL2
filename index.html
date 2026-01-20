@@ -37,6 +37,24 @@
       overflow:hidden;
       position:relative;
     }
+    <section id="screen" style="display:none;">
+  <div class="screenTop">
+    <div class="screenTitle">Share Love Joy Hope</div>
+    <div class="screenSub">Scan QR to upload</div>
+  </div>
+
+  <div class="slideWrap">
+    <img id="screenImg" alt="slide"/>
+    <div class="screenText">
+      <div id="screenNick" class="screenNick"></div>
+      <div id="screenMsg" class="screenMsg"></div>
+      <div id="screenDate" class="screenDate"></div>
+    </div>
+  </div>
+
+  <div class="screenHint">Press F11 for fullscreen</div>
+</section>
+
     .page{
       position:absolute;
       inset:0;
@@ -294,6 +312,59 @@
     .detailMsg{ font-size:12px; color: rgba(59,43,49,.85); line-height:1.35; margin-bottom:10px; padding:0 8px; white-space:pre-wrap; }
     .date{ font-size:11px; color: rgba(59,43,49,.55); padding-bottom:6px; }
   </style>
+  /* SCREEN mode */
+#screen{
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(var(--bg1), var(--bg2));
+  color: var(--ink);
+  padding: 4vh 5vw;
+}
+.screenTop{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  margin-bottom: 3vh;
+}
+.screenTitle{
+  font-size: 4.2vw;
+  font-weight: 900;
+  color: var(--brand);
+}
+.screenSub{ font-size: 1.6vw; color: var(--muted); }
+
+.slideWrap{
+  display:grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 3vw;
+  height: 78vh;
+  align-items:center;
+}
+#screenImg{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  border-radius: 24px;
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(0,0,0,.08);
+  background:#fff;
+}
+.screenText{
+  background: rgba(255,255,255,.65);
+  border: 1px solid rgba(0,0,0,.08);
+  border-radius: 24px;
+  box-shadow: var(--shadow);
+  padding: 3vw;
+  height: 100%;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+.screenNick{ font-size: 3vw; font-weight: 900; margin-bottom: 1.2vh; }
+.screenMsg{ font-size: 2.2vw; font-weight: 650; line-height: 1.25; white-space: pre-wrap; }
+.screenDate{ margin-top: 2vh; font-size: 1.4vw; color: var(--muted); }
+.screenHint{ position:fixed; bottom: 2vh; right: 3vw; font-size: 1.2vw; color: rgba(59,43,49,.55); }
+
 </head>
 
 <body>
@@ -656,6 +727,80 @@
   }
 
   // init
+  const isScreenMode = new URLSearchParams(location.search).get("mode") === "screen";
+
+const screenEl = document.getElementById("screen");
+const phoneEl  = document.querySelector(".phone");
+
+const screenImg  = document.getElementById("screenImg");
+const screenNick = document.getElementById("screenNick");
+const screenMsg  = document.getElementById("screenMsg");
+const screenDate = document.getElementById("screenDate");
+
+let slideIdx = 0;
+let slideTimer = null;
+let refreshTimer = null;
+
+function formatDate(ts){
+  const d = new Date(ts);
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth()+1).padStart(2,"0");
+  const dd = String(d.getDate()).padStart(2,"0");
+  return `${yyyy} / ${mm} / ${dd}`;
+}
+
+function renderSlide(){
+  // 최신순(이미 entries가 최신순으로 쌓이지만, 안전하게 정렬)
+  const sorted = [...entries].sort((a,b) => b.createdAt - a.createdAt);
+  if(sorted.length === 0) return;
+
+  if(slideIdx >= sorted.length) slideIdx = 0;
+  const e = sorted[slideIdx];
+
+  screenImg.src = e.imgDataUrl;
+  screenNick.textContent = e.nick;
+  screenMsg.textContent  = e.msg;
+  screenDate.textContent = formatDate(e.createdAt);
+}
+
+function startScreenSlideshow(){
+  // 7초마다 다음(원하면 5~8초로 조절)
+  if(slideTimer) clearInterval(slideTimer);
+  slideTimer = setInterval(() => {
+    slideIdx += 1;
+    renderSlide();
+  }, 7000);
+
+  // 3초마다 entries 다시 읽기 (localStorage 기반 “같은 PC 탭” 갱신용)
+  if(refreshTimer) clearInterval(refreshTimer);
+  refreshTimer = setInterval(() => {
+    entries = loadEntries();
+    renderSlide();
+  }, 3000);
+
+  // 같은 PC에서 다른 탭이 저장하면 즉시 반영
+  window.addEventListener("storage", (ev) => {
+    if(ev.key === LS_KEY){
+      entries = loadEntries();
+      slideIdx = 0; // 새 글 들어오면 최신부터 다시 보여주기
+      renderSlide();
+    }
+  });
+
+  renderSlide();
+}
+
+if(isScreenMode){
+  // phone UI 숨기고 screen UI로 전환
+  phoneEl.style.display = "none";
+  screenEl.style.display = "block";
+
+  // 갤러리 flip 루프 같은 건 굳이 안 돌아도 됨
+  if(flipTimer) clearInterval(flipTimer);
+
+  startScreenSlideshow();
+}
+
   renderGallery();
 </script>
 </body>
