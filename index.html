@@ -699,7 +699,126 @@
 
     backToMain.addEventListener("click", () => show(pageMain));
 
-    /***********************
-     * Detail
-     ***********************/
-    close
+   /***********************
+ * Detail + Gallery Rendering
+ ***********************/
+function openDetail(entry){
+  // detail page 채우기
+  detailImg.src = entry.imgUrl;
+  detailNick.textContent = entry.nick;
+  detailMsg.textContent  = entry.msg;
+  detailDate.textContent = formatDate(entry.createdAt);
+  show(pageDetail);
+}
+
+closeDetail.addEventListener("click", () => {
+  show(pageGallery);
+});
+
+// 갤러리 하트 카드 만들기
+function renderGallery(){
+  // 이전 타이머 정리
+  if(flipTimer) clearInterval(flipTimer);
+
+  heartStack.innerHTML = "";
+
+  const W = 150;     // 하트 카드 폭
+  const H = 140;     // 하트 카드 높이
+  const GAP = 14;    // 간격
+
+  const cols = 2; // phone UI이므로 2열 추천
+  const stackWidth = heartStack.clientWidth || 300;
+
+  // 절대배치로 쌓을거라, 각 카드 위치 계산
+  entries.forEach((entry, i) => {
+    const col = i % cols;
+    const row = Math.floor(i / cols);
+
+    const x = col * (W + GAP);
+    const y = row * (H + GAP);
+
+    const card = document.createElement("div");
+    card.className = "heartCard";
+    card.style.width = `${W}px`;
+    card.style.height = `${H}px`;
+    card.style.left = `${x}px`;
+    card.style.top  = `${y}px`;
+
+    // 앞면(이미지) + 뒷면(텍스트)
+    card.innerHTML = `
+      <div class="heartInner">
+        <div class="heartFace heartFront">
+          <div class="heartShape">
+            <img src="${escapeHtml(entry.imgUrl)}" alt="img"/>
+          </div>
+        </div>
+        <div class="heartFace heartBack">
+          <div class="heartShape">
+            <div class="heartTextWrap">
+              <div class="heartNick">${escapeHtml(entry.nick)}</div>
+              <div class="heartMsg">${escapeHtml(entry.msg)}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    // 클릭하면 상세 보기
+    card.addEventListener("click", () => openDetail(entry));
+
+    heartStack.appendChild(card);
+  });
+
+  // 컨테이너 높이 맞추기 (스크롤 정상화)
+  const rows = Math.ceil(entries.length / cols);
+  const neededHeight = rows * (H + GAP) + 20;
+  heartStack.style.height = `${neededHeight}px`;
+
+  // 자동 플립(원하면 끄면 됨)
+  flipTimer = setInterval(() => {
+    const cards = Array.from(document.querySelectorAll(".heartCard"));
+    if(!cards.length) return;
+    const pick = cards[Math.floor(Math.random() * cards.length)];
+    pick.classList.toggle("showBack");
+    setTimeout(() => pick.classList.toggle("showBack"), 1200);
+  }, 1200);
+}
+
+/***********************
+ * Screen Mode (선택)
+ ***********************/
+async function startScreenMode(){
+  await refreshFromDB();
+  let idx = 0;
+
+  function draw(){
+    if(entries.length === 0) return;
+    const e = entries[idx % entries.length];
+    screenImg.src = e.imgUrl;
+    screenNick.textContent = e.nick;
+    screenMsg.textContent  = e.msg;
+    screenDate.textContent = formatDate(e.createdAt);
+    idx++;
+  }
+
+  draw();
+  setInterval(async () => {
+    await refreshFromDB();
+    draw();
+  }, 3500);
+}
+
+/***********************
+ * Init
+ ***********************/
+(async function init(){
+  if(isScreenMode){
+    screenEl.style.display = "block";
+    phoneEl.style.display = "none";
+    startScreenMode();
+    return;
+  }
+
+  // 기본: 메인 화면
+  show(pageMain);
+})();
